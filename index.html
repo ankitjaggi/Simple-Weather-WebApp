@@ -2,11 +2,14 @@
 <head>
 	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="semantic/semantic.min.css" rel="stylesheet" type="text/css">
+    <link href="weather/css/weather-icons.css" rel="stylesheet" type="text/css">
+<link href="http://bootswatch.com/lumen/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="weather/jquery.simpleWeather.min.js"></script>
 <script src="semantic/semantic.min.js"></script>
-<link href="weather/css/weather-icons.css" rel="stylesheet" type="text/css">
-<link href="http://bootswatch.com/lumen/bootstrap.min.css" rel="stylesheet">
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
 <style>
     @font-face {
     font-family: 'weather';
@@ -21,35 +24,76 @@
 .ui.cards .card {
   width: 500px;
 }
-
+.secdata {
+    margin-top: -40px;
+}
 </style>
+<title>Simple Weather App</title>
 </head>
 <body>
 <div class="container">
-<input type="text" id="city" name="city">
-<a href="#" class="btn btn-primary" id="submit">Add</a>
+    <h3>Simple Weather App</h3>
+<input type="text" id="city" class="form-control" name="city" placeholder="Enter city, country, region and then press Enter">
 
+<!-- <a href="#" class="btn btn-primary" id="submit">Add</a> -->
+<br><br>
+<div id="loading" style="display:none;">
+    <img src="img/spinner.gif">
+</div>
 <div id="weather">
 <div class='ui cards' id="insideweather">
 
 </div>
 </div>
 <script>
+
+$( "#city" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "http://gd.geobytes.com/AutoCompleteCity",
+          dataType: "jsonp",
+          data: {
+            q: request.term
+          },
+          success: function( data ) {
+            response (data);
+
+          }
+        });
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        
+        
+        $("#city").val(ui.item.label);
+        submitForm();
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    });
+
+
 $("#weather").hide();
 var count=0;
 var citiesdata="";
 $("#submit").click(function(e) {
+	$("#loading").show();
 	
-	var input = $("#city").val();
-	loadWeather(input, '');
-	
+	submitForm();
 
 });
 
 $("#city").keydown(function(e) {
 	var keyCode = (e.keyCode ? e.keyCode : e.which);
 	if(keyCode==13)
-		$('#submit').trigger('click');   
+    {
+		submitForm();
+        $("#loading").show();
+    }
 });
 
 $("#weather").click(function(e) {
@@ -60,6 +104,14 @@ $("#weather").click(function(e) {
 		$("#card"+e.target.id.charAt((e.target.id.length)-1)).hide();
 	}
 });
+
+
+function submitForm()
+{
+    var input = $("#city").val();
+    
+    loadWeather(input, '');
+}
 
 function loadWeather(location, woeid) {
   $.simpleWeather({
@@ -72,12 +124,13 @@ function loadWeather(location, woeid) {
       weathericonvalue = icon+'&nbsp;'+weather.temp+'<sup>&deg;'+weather.units.temp+'</sup>';
       
 
-      var result = "<div class='card' id='card"+count+"'><div class='content'><a href='#' id='remove"+count+"' class='right floated remove'><i id='remove"+count+"' class='right floated remove icon'></i></a><div class='header' id='location'><h3>"+weather.city+", "+weather.region+", "+weather.country+"</h3></div> <div class='meta' id='currentTime'>"+weather.updated+"</div><div class='meta' id='currentWeather'><h5>"+weather.currently+"</h5></div><div class='description' id='description'><h2>"+weathericonvalue+"</h2> <h4 class='right floated'>Humidity: "+weather.humidity+"%<br>Precipitation: "+weather.wind.speed+"<br>Wind: "+weather.wind.speed+" km/h</h4></div></div></div>";
+      var result = "<div class='card' id='card"+count+"'><div class='content'><a href='#' id='remove"+count+"' class='right floated remove'><i id='remove"+count+"' class='right floated remove icon'></i></a><div class='header' id='location'><h3>"+weather.city+", "+weather.region+", "+weather.country+"</h3></div> <div class='meta' id='currentTime'>"+weather.updated+"</div><div class='meta' id='currentWeather'><h5>"+weather.currently+"</h5></div><div class='description' id='description'><h2>"+weathericonvalue+"</h2> <h4 class='right floated secdata'>Humidity: "+weather.humidity+"%<br>Pressure: "+weather.pressure+weather.units.pressure+"<br><i class='wi wi-strong-wind'></i> "+weather.wind.speed+" km/h<br><i class='wi wi-sunrise'></i>&nbsp;"+weather.sunrise+"<br><i class='wi wi-sunset'></i>&nbsp;"+weather.sunset+"</h4></div></div></div>";
 
 
 
       $("#insideweather").append(result);
       count++;
+      $("#loading").hide();
       $("#weather").show();
         
       console.log(weather);
@@ -86,23 +139,12 @@ function loadWeather(location, woeid) {
     },
     error: function(error) {
     	console.log(error);
+        $("#loading").show();
       $("#weather").append('<p>'+error+'</p>');
     }
   });
 }
 
-	function listCities()
-	{
-	$.getJSON('cities.json',function(data){
-            console.log('success');
-            $.each(data.country,function(i,emp){
-                console.log(emp);
-            });
-        }).error(function(){
-            console.log('error');
-        });
-	
-	}
 	
         function setWeatherIcon(condid) {
  
