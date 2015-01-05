@@ -3,6 +3,8 @@ Simple-Weather-WebApp
 
 It is a simple weather web application that uses the Yahoo Weather API to give the weather of different cities. You can add as well as remove cities. More features will be added soon.
 
+Live demo: http://ankitjaggi.com/projects/weatherapp
+
 
 v1.1:
 
