@@ -3,7 +3,7 @@
 	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="semantic/semantic.min.css" rel="stylesheet" type="text/css">
     <link href="weather/css/weather-icons.css" rel="stylesheet" type="text/css">
-<link href="http://bootswatch.com/lumen/bootstrap.min.css" rel="stylesheet">
+<link href="http://bootswatch.com/darkly/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="weather/jquery.simpleWeather.min.js"></script>
@@ -11,6 +11,13 @@
 <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 <style>
+body { 
+  background: url(img/bg3.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
     @font-face {
     font-family: 'weather';
     src: url('http://s3-us-west-2.amazonaws.com/s.cdpn.io/93/artill_clean_icons-webfont.eot');
@@ -256,6 +263,14 @@ function loadWeather(location, woeid) {
 }
         
         </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52527606-1', 'auto');
+  ga('send', 'pageview');
 
 </script>
 
