@@ -5,6 +5,10 @@ It is a simple weather web application that uses the Yahoo Weather API to give t
 
 Live demo: http://ankitjaggi.com/projects/weatherapp
 
+v1.2:
+
+- Added support for local storage. Now your locations will be saved locally in your browser.
+
 
 v1.1:
 
